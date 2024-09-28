@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
@@ -52,4 +53,11 @@ class ToDoControllerTest {
         verify(toDoService, times(1)).createToDo(captor.capture());
         assertThat(captor.getValue()).usingRecursiveComparison().isEqualTo(newToDo);
     }
+
+    @Test
+    void shouldDeleteRequestsToRemoveATodo() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.delete("/api/todos/10")).andExpect(status().isOk());
+        verify(toDoService, times(1)).deleteToDo(10L);
+    }
+
 }
